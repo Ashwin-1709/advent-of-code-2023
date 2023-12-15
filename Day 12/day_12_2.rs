@@ -1,13 +1,20 @@
 use std::fs;
+use std::time::Instant;
 
 const PARSE_ERROR: &str = "Parsing issue";
 const FILE_ERROR: &str = "File Operation Error";
 
-fn ways(i: usize, j: usize, dp: &mut Vec<Vec<i64>>, spring: &str, groups: &Vec<usize>) -> i64 {
+fn ways(
+    i: usize,
+    j: usize,
+    dp: &mut Vec<Vec<i64>>,
+    spring: &Vec<char>,
+    groups: &Vec<usize>,
+) -> i64 {
     if j >= groups.len() {
         let mut consistent: bool = true;
         for x in i..spring.len() {
-            consistent &= (spring.chars().nth(x).unwrap() != '#');
+            consistent &= (spring[x] != '#');
         }
         return consistent as i64;
     }
@@ -23,21 +30,18 @@ fn ways(i: usize, j: usize, dp: &mut Vec<Vec<i64>>, spring: &str, groups: &Vec<u
     assert!(i < spring.len());
     assert!(j < groups.len());
     let mut ans: i64 = 0;
-    if spring.chars().nth(i).unwrap() == '?' || spring.chars().nth(i).unwrap() == '.' {
+    if spring[i] == '?' || spring[i] == '.' {
         ans += ways(i + 1, j, dp, &spring, &groups);
     }
-    if (spring.chars().nth(i).unwrap() == '?' || spring.chars().nth(i).unwrap() == '#')
-        && (groups[j] + i <= spring.len())
-    {
+    if (spring[i] == '?' || spring[i] == '#') && (groups[j] + i <= spring.len()) {
         let mut consistent: bool = true;
         assert!(i + groups[j] <= spring.len());
         for x in i..(i + groups[j]) {
             assert!(x < spring.len());
-            consistent &=
-                (spring.chars().nth(x).unwrap() == '?' || spring.chars().nth(x).unwrap() == '#');
+            consistent &= (spring[x] == '?' || spring[x] == '#');
         }
         if i + groups[j] < spring.len() {
-            consistent &= spring.chars().nth(i + groups[j]).unwrap() != '#';
+            consistent &= spring[i + groups[j]] != '#';
         }
         if consistent {
             ans += ways(i + groups[j] + 1, j + 1, dp, spring, groups);
@@ -48,6 +52,7 @@ fn ways(i: usize, j: usize, dp: &mut Vec<Vec<i64>>, spring: &str, groups: &Vec<u
 }
 
 fn main() {
+    let start = Instant::now();
     let input = fs::read_to_string("src/input.txt").expect(FILE_ERROR);
     let springs: Vec<&str> = input.lines().collect();
     let mut ans: i64 = 0;
@@ -70,9 +75,12 @@ fn main() {
         for x in 0..dp.len() {
             dp[x].resize(fold.len() + 1, -1);
         }
-        let cur_ways = ways(0, 0, &mut dp, pass_data, &fold);
+        let str_mod: Vec<char> = pass_data.chars().collect();
+        let cur_ways = ways(0, 0, &mut dp, &str_mod, &fold);
         ans += cur_ways;
     }
 
     println!("{}", ans);
+    let elapsed = start.elapsed();
+    println!("Time taken: {:?}", elapsed);
 }

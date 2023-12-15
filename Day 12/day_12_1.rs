@@ -3,11 +3,17 @@ use std::fs;
 const PARSE_ERROR: &str = "Parsing issue";
 const FILE_ERROR: &str = "File Operation Error";
 
-fn ways(i: usize, j: usize, dp: &mut Vec<Vec<i32>>, spring: &str, groups: &Vec<usize>) -> i32 {
+fn ways(
+    i: usize,
+    j: usize,
+    dp: &mut Vec<Vec<i32>>,
+    spring: &Vec<char>,
+    groups: &Vec<usize>,
+) -> i32 {
     if j >= groups.len() {
         let mut consistent: bool = true;
         for x in i..spring.len() {
-            consistent &= (spring.chars().nth(x).unwrap() != '#');
+            consistent &= (spring[x] != '#');
         }
         return consistent as i32;
     }
@@ -23,21 +29,18 @@ fn ways(i: usize, j: usize, dp: &mut Vec<Vec<i32>>, spring: &str, groups: &Vec<u
     assert!(i < spring.len());
     assert!(j < groups.len());
     let mut ans: i32 = 0;
-    if spring.chars().nth(i).unwrap() == '?' || spring.chars().nth(i).unwrap() == '.' {
+    if spring[i] == '?' || spring[i] == '.' {
         ans += ways(i + 1, j, dp, &spring, &groups);
     }
-    if (spring.chars().nth(i).unwrap() == '?' || spring.chars().nth(i).unwrap() == '#')
-        && (groups[j] + i <= spring.len())
-    {
+    if (spring[i] == '?' || spring[i] == '#') && (groups[j] + i <= spring.len()) {
         let mut consistent: bool = true;
         assert!(i + groups[j] <= spring.len());
         for x in i..(i + groups[j]) {
             assert!(x < spring.len());
-            consistent &=
-                (spring.chars().nth(x).unwrap() == '?' || spring.chars().nth(x).unwrap() == '#');
+            consistent &= (spring[x] == '?' || spring[x] == '#');
         }
         if i + groups[j] < spring.len() {
-            consistent &= spring.chars().nth(i + groups[j]).unwrap() != '#';
+            consistent &= spring[i + groups[j]] != '#';
         }
         if consistent {
             ans += ways(i + groups[j] + 1, j + 1, dp, spring, groups);
@@ -63,14 +66,10 @@ fn main() {
         for x in 0..dp.len() {
             dp[x].resize(groups.len() + 1, -1);
         }
-        let cur_ways = ways(0, 0, &mut dp, data[0], &groups);
+        let str_mod: Vec<char> = data[0].chars().collect();
+        let cur_ways = ways(0, 0, &mut dp, &str_mod, &groups);
         ans += cur_ways;
     }
 
     println!("{}", ans);
 }
-
-/*
-?#?#?#?#?#?#?#?
-.#.#?#?#?#?#?#?
-*/
