@@ -16,7 +16,15 @@ fn valid(x: i32, y: i32, n: usize, m: usize) -> bool {
     return x >= 0 && x < (n as i32) && y >= 0 && y < (m as i32);
 }
 
-fn valid_swap(x1: usize, y1: usize, x2: usize, y2: usize, n: usize, m: usize, grid: &mut Vec<Vec<char>>) -> bool{
+fn valid_swap(
+    x1: usize,
+    y1: usize,
+    x2: usize,
+    y2: usize,
+    n: usize,
+    m: usize,
+    grid: &mut Vec<Vec<char>>,
+) -> bool {
     if !valid(x1 as i32, y1 as i32, n, m) {
         return false;
     }
@@ -60,7 +68,7 @@ fn score(grid: &mut Vec<Vec<char>>) -> i32 {
         for y in 0..grid[0].len() {
             if grid[x][y] == 'O' {
                 ans += damage;
-            } 
+            }
         }
         damage -= 1;
     }
@@ -69,7 +77,8 @@ fn score(grid: &mut Vec<Vec<char>>) -> i32 {
 fn main() {
     let input = fs::read_to_string("src/input.txt").expect(FILE_ERROR);
     let grid: Vec<&str> = input.lines().collect();
-    let mut grid_chars: Vec<Vec<char>> = grid.into_iter().map(|row| row.chars().collect()).collect();
+    let mut grid_chars: Vec<Vec<char>> =
+        grid.into_iter().map(|row| row.chars().collect()).collect();
     tilt(&mut grid_chars);
     println!("{}", score(&mut grid_chars));
 }

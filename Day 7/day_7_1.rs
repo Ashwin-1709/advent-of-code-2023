@@ -1,5 +1,5 @@
-use std::{collections::HashMap, fs};
 use std::cmp::Ordering;
+use std::{collections::HashMap, fs};
 
 const PARSE_ERROR: &str = "Parsing issue";
 const FILE_ERROR: &str = "File Operation Error";
@@ -103,12 +103,12 @@ fn compare_cards(card1: &str, card2: &str) -> Ordering {
         };
     }
 
-    return Ordering::Equal
+    return Ordering::Equal;
 }
 
 fn compare_hands(hand1: &hand, hand2: &hand) -> Ordering {
     if hand1.property == hand2.property {
-        return compare_cards(&hand1.cards, &hand2.cards)
+        return compare_cards(&hand1.cards, &hand2.cards);
     }
     return hand1.cmp(&hand2);
 }

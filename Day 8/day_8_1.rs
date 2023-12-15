@@ -1,4 +1,4 @@
-use std::{fs, collections::HashMap};
+use std::{collections::HashMap, fs};
 
 const PARSE_ERROR: &str = "Parsing issue";
 const FILE_ERROR: &str = "File Operation Error";
@@ -14,7 +14,7 @@ fn main() {
         let r = adj[3].get(0..3).unwrap();
         graph.entry(node).or_insert((l, r));
     }
-    
+
     let mut node = "AAA";
     let dest = "ZZZ";
     let mut i: usize = 0;

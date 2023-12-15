@@ -1,9 +1,8 @@
-use std::{fs, collections::HashMap};
 use std::cmp::{max, min};
+use std::{collections::HashMap, fs};
 
 const PARSE_ERROR: &str = "Parsing issue";
 const FILE_ERROR: &str = "File Operation Error";
-
 
 fn gcd(a: i64, b: i64) -> i64 {
     match ((a, b), (a & 1, b & 1)) {
@@ -23,7 +22,7 @@ fn lcm(a: i64, b: i64) -> i64 {
     a * b / gcd(a, b)
 }
 
-fn is_source(s: &str) -> bool{
+fn is_source(s: &str) -> bool {
     let x = s.len();
     s.chars().nth(x - 1) == Some('A')
 }
