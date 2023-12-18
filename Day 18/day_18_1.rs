@@ -1,6 +1,7 @@
 use std::fs;
 const PARSE_ERROR: &str = "Parsing issue";
 const FILE_ERROR: &str = "File Operation Error";
+
 fn main() {
     let input = fs::read_to_string("src/input.txt").expect(FILE_ERROR);
     let instructions: Vec<&str> = input.lines().collect();
